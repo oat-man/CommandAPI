@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using CommandAPI.Data;
 using Npgsql;
+using AutoMapper;
 
 namespace CommandAPI
 {
@@ -17,8 +19,6 @@ namespace CommandAPI
         {
             Configuration = configuration;
         }
-
-
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -38,6 +38,8 @@ namespace CommandAPI
 
 
             services.AddControllers();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //services.AddScoped<ICommandAPIRepo, MockCommandAPIRepo>();
             services.AddScoped<ICommandAPIRepo, SqlCommandAPIRepo>();

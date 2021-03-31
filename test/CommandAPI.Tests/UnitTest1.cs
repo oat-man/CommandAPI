@@ -3,6 +3,7 @@ using Xunit;
 
 namespace CommandAPI.Tests
 {
+    /**
     public class UnitTest1
     {
         [Fact]
@@ -11,4 +12,5 @@ namespace CommandAPI.Tests
 
         }
     }
+    **/
 }

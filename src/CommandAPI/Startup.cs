@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +13,7 @@ using CommandAPI.Data;
 using Npgsql;
 using AutoMapper;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CommandAPI
 {
@@ -37,14 +42,18 @@ namespace CommandAPI
             services.AddDbContext<CommandContext>
                 (opt => opt.UseNpgsql(builder.ConnectionString));
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.Audience = Configuration["ResourceID"];
+                opt.Authority = $"{Configuration["Instance"]}{Configuration["TenantId"]}";
+            });
+
             services.AddControllers().AddNewtonsoftJson(s => 
             {
                 s.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
             });
 
-
-            services.AddControllers();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -65,6 +74,9 @@ namespace CommandAPI
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

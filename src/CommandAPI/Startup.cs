@@ -42,6 +42,11 @@ namespace CommandAPI
             services.AddDbContext<CommandContext>
                 (opt => opt.UseNpgsql(builder.ConnectionString));
 
+            /*******************************************/
+            /** Added comment for trigger 'git push' **/
+            /*****************************************/
+
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             {
                 opt.Audience = Configuration["ResourceID"];
